@@ -1,0 +1,5 @@
+.vscode/
+**/node_modules/
+frontend/build/
+backend/dist/
+backend/webpack.config.js
