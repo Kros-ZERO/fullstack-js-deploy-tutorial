@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const host = 'localhost';
-const port = '7101'
+const port = '7101';
 
 function App() {
   const [hello, setHello] = useState('');
@@ -12,13 +12,13 @@ function App() {
     axios.get(`http://${host}:${port}`)
       .then(res => setHello(res.data))
       .catch(err => setHello(err.message));
-  }, [])
+  }, []);
 
   useEffect(() => {
     axios.get(`http://${host}:${port}/visit`)
       .then(res => setTimes(res.data))
       .catch(err => setTimes(err.message));
-  }, [])
+  }, []);
 
   return (
     <>
