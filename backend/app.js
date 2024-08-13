@@ -10,7 +10,7 @@ app.use(cors({
 }));
 
 const mysql = require('mysql2');
-connection = mysql.createConnection({
+const pool = mysql.createPool({
   host: host,
   user: 'root',
   password: '',
@@ -18,7 +18,11 @@ connection = mysql.createConnection({
 });
 
 // Test db connection
-connection.connect((err) => console.log(err || 'Mysql connected'));
+if (pool) {
+  console.log('connectionLimit:', pool.config.connectionLimit);
+  console.log('waitForConnections:', pool.config.waitForConnections);
+  console.log('queueLimit:', pool.config.queueLimit);
+}
 
 // Test api without db
 app.get('/', (req, res) => {
@@ -27,7 +31,17 @@ app.get('/', (req, res) => {
 
 // Test api with db
 app.get('/visit', (req, res) => {
-  connection.query('INSERT INTO visit(time) SELECT NOW()', ((_, data) => {
+  pool.query('INSERT INTO visit(time) SELECT NOW()', ((_, data) => {
+    /* data format:
+    {
+      "fieldCount": 0,
+      "affectedRows": 1,
+      "insertId": 181,
+      "info": "Records: 1  Duplicates: 0  Warnings: 0",
+      "serverStatus": 2,
+      "warningStatus": 0,
+      "changedRows": 0
+    } */
     res.json(data.insertId);
   }));
 });
