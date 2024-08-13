@@ -14,14 +14,12 @@ const pool = mysql.createPool({
   host: host,
   user: 'root',
   password: '',
-  database: 'deploy',
+  database: 'deploy'
 });
 
 // Test db connection
 if (pool) {
-  console.log('connectionLimit:', pool.config.connectionLimit);
-  console.log('waitForConnections:', pool.config.waitForConnections);
-  console.log('queueLimit:', pool.config.queueLimit);
+  console.log('MySQL connected');
 }
 
 // Test api without db
@@ -32,16 +30,6 @@ app.get('/', (req, res) => {
 // Test api with db
 app.get('/visit', (req, res) => {
   pool.query('INSERT INTO visit(time) SELECT NOW()', ((_, data) => {
-    /* data format:
-    {
-      "fieldCount": 0,
-      "affectedRows": 1,
-      "insertId": 181,
-      "info": "Records: 1  Duplicates: 0  Warnings: 0",
-      "serverStatus": 2,
-      "warningStatus": 0,
-      "changedRows": 0
-    } */
     res.json(data.insertId);
   }));
 });
